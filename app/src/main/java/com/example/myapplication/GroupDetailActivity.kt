@@ -63,7 +63,7 @@ class GroupDetailActivity : AppCompatActivity() {
 
     private fun save() {
         val queue = Volley.newRequestQueue(this)
-        var url = "${APIConstants.BASE_URL}/group/${this.contactId}"
+        var url = "${APIConstants.BASE_URL}/group?contactId=${this.contactId}"
 
         val jsonData = Json.stringify(Group.serializer(), this.group)
         val jsonObject = JSONObject(jsonData)
