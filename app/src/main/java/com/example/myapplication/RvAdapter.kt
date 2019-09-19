@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.adapter_item_layout.view.*
 
 class RvAdapter(
-    private val userList: ArrayList<GroupDetail>,
-    private val clickListener: (GroupDetail) -> Unit
+    private val userList: ArrayList<Group>,
+    private val clickListener: (Group) -> Unit
 ) :
     RecyclerView.Adapter<RvAdapter.ViewHolder>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
@@ -25,7 +25,7 @@ class RvAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(group: GroupDetail, clickListener: (GroupDetail) -> Unit) {
+        fun bind(group: Group, clickListener: (Group) -> Unit) {
             itemView.tvName.text = group.name
             itemView.setOnClickListener { clickListener(group) }
         }

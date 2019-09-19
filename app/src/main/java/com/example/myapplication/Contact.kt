@@ -4,25 +4,20 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
 
 @Serializable
 @Entity
-data class User(
+data class Contact(
     var name: String,
     var phoneNumber: String = ""
 ) {
 
     @PrimaryKey
-    var id: String = UUID.randomUUID().toString()
-
+    var contact: String = ""
     @Ignore
-    var groups: ArrayList<UserGroups> = ArrayList()
-}
-
-@Serializable
-data class UserGroups(var group: String = "") {
     var participate: Boolean = false
-    var permision: Long = 1
+    @Ignore
+    var permission: Int = 0
+    @Ignore
+    var checked: Boolean = false
 }

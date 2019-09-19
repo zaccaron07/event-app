@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.contact_detail_adapter_item_layout.view.*
 
 class ContactRvAdapter(
-    public val contactList: ArrayList<ContactDetail>,
-    private val clickListener: (ContactDetail, CheckBox) -> Unit
+    private val contactList: ArrayList<Contact>,
+    private val clickListener: (Contact, CheckBox) -> Unit
 ) :
     RecyclerView.Adapter<ContactRvAdapter.ViewHolder>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
@@ -28,13 +28,13 @@ class ContactRvAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(contactDetail: ContactDetail, clickListener: (ContactDetail, CheckBox) -> Unit) {
-            itemView.tvName.text = contactDetail.name
-            itemView.checkBoxContact.isChecked = contactDetail.checked
-            itemView.setOnClickListener { clickListener(contactDetail, itemView.checkBoxContact) }
+        fun bind(Contact: Contact, clickListener: (Contact, CheckBox) -> Unit) {
+            itemView.tvName.text = Contact.name
+            itemView.checkBoxContact.isChecked = Contact.checked
+            itemView.setOnClickListener { clickListener(Contact, itemView.checkBoxContact) }
             itemView.checkBoxContact.setOnClickListener {
                 clickListener(
-                    contactDetail,
+                    Contact,
                     itemView.checkBoxContact
                 )
             }

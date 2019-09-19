@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 class HomeActivity : AppCompatActivity(),
-    UserProfileFragment.OnFragmentInteractionListener,
+    ContactProfileFragment.OnFragmentInteractionListener,
     GroupsFragment.OnFragmentInteractionListener {
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity(),
         val firstLogin = intent.getBooleanExtra("firstLogin", false)
 
         if (firstLogin) {
-            this.replaceFragment(UserProfileFragment.newInstance())
+            this.replaceFragment(ContactProfileFragment.newInstance())
         } else {
             this.replaceFragment(GroupsFragment.newInstance())
         }
@@ -35,9 +35,14 @@ class HomeActivity : AppCompatActivity(),
         fragmentTransaction.commit()
     }
 
-    fun startActivity(activityClass: Class<*>, data: String = "") {
+    fun startActivity(activityClass: Class<*>, data: String = "", contactId: String = "") {
         val intent = Intent(this, activityClass)
         intent.putExtra("group", data)
+
+        if (contactId != "") {
+            intent.putExtra("contactId", contactId)
+        }
+
         this.startActivity(intent)
     }
 

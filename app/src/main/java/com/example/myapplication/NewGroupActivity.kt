@@ -20,7 +20,7 @@ class NewGroupActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         this.floatingActionButtonAddContacts.setOnClickListener {
-            val group = GroupDetail(
+            val group = Group(
                 editTextName.text.toString(),
                 editTextDescription.text.toString(),
                 editTextStartTime.text.toString(),
@@ -29,7 +29,7 @@ class NewGroupActivity : AppCompatActivity() {
 
             this.startActivity(
                 AddContactActivity::class.java,
-                Json.stringify(GroupDetail.serializer(), group)
+                Json.stringify(Group.serializer(), group)
             )
         }
 

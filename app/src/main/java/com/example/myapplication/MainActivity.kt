@@ -4,21 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.facebook.accountkit.AccountKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.list
-import org.json.JSONArray
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private var db: AppDatabase? = null
@@ -28,33 +18,34 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         db = AppDatabase?.invoke(this)
-        // deleteuser()
-        //insertUser()
+        //deleteContact()
+        //insertContact()
         findUser()
     }
 
-    private fun insertUser() {
-        var user = User("Gabriel", "48")
+    private fun insertContact() {
+        var contact = Contact("Gabriel", "+5548998176127")
+        contact.contact = "5d7d1cc0d3395927f83c706b"
 
         GlobalScope.launch {
-            db?.userDao()?.insertUser(user)
+            db?.contactDao()?.insertContact(contact)
         }
     }
 
-    private fun deleteuser() {
+    private fun deleteContact() {
         GlobalScope.launch {
-            db?.userDao()?.deleteUser()
+            db?.contactDao()?.deleteContact()
         }
     }
 
     private fun findUser() {
         GlobalScope.launch {
-            val user = withContext(Dispatchers.Default) {
-                db?.userDao()?.getUser()
+            val contact = withContext(Dispatchers.Default) {
+                db?.contactDao()?.getContact()
             }
 
-            if (user != null) {
-                Log.d("totalU", user.toString())
+            if (contact != null) {
+                Log.d("totalU", contact.toString())
                 goToHome()
             } else {
                 if (AccountKit.getCurrentAccessToken() != null) {

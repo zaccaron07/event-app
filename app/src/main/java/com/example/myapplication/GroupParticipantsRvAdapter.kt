@@ -9,8 +9,9 @@ import kotlinx.android.synthetic.main.contact_detail_adapter_item_layout.view.tv
 import kotlinx.android.synthetic.main.group_participants_adapter_item_layout.view.*
 
 class GroupParticipantsRvAdapter(
-    private val userGroupDetailList: ArrayList<UserGroupDetail>,
-    private val clickListener: (UserGroupDetail, Switch) -> Unit
+    private val contactList: ArrayList<Contact>,
+    private val clickListener: (Contact, Switch) -> Unit,
+    private val contactId: String
 ) :
     RecyclerView.Adapter<GroupParticipantsRvAdapter.ViewHolder>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
@@ -21,30 +22,31 @@ class GroupParticipantsRvAdapter(
     }
 
     override fun getItemCount(): Int {
-        return userGroupDetailList.size
+        return contactList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(userGroupDetailList[position], clickListener)
+        holder.bind(contactList[position], clickListener, contactId)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(
-            userGroupDetail: UserGroupDetail,
-            clickListener: (UserGroupDetail, Switch) -> Unit
+            contact: Contact,
+            clickListener: (Contact, Switch) -> Unit,
+            contactId: String
         ) {
-            itemView.tvName.text = userGroupDetail.name
-            itemView.switchParticipate.isEnabled = (userGroupDetail.permission == 1)
-            itemView.switchParticipate.isChecked = userGroupDetail.participate
+            itemView.tvName.text = contact.name
+            itemView.switchParticipate.isEnabled = (contact.contact == contactId)
+            itemView.switchParticipate.isChecked = contact.participate
             itemView.setOnClickListener {
                 clickListener(
-                    userGroupDetail,
+                    contact,
                     itemView.switchParticipate
                 )
             }
             itemView.switchParticipate.setOnClickListener {
                 clickListener(
-                    userGroupDetail,
+                    contact,
                     itemView.switchParticipate
                 )
             }
