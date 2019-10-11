@@ -18,14 +18,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         db = AppDatabase?.invoke(this)
-        //deleteContact()
-        //insertContact()
+
         findUser()
     }
 
     private fun insertContact() {
         var contact = Contact("Gabriel", "+5548998176127")
-        contact.contact = "5d7d1cc0d3395927f83c706b"
+        contact.id = "5d8678bbcb6e470017c9bd95"
 
         GlobalScope.launch {
             db?.contactDao()?.insertContact(contact)
@@ -36,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch {
             db?.contactDao()?.deleteContact()
         }
+        AccountKit.logOut()
     }
 
     private fun findUser() {
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (contact != null) {
-                Log.d("totalU", contact.toString())
                 goToHome()
             } else {
                 if (AccountKit.getCurrentAccessToken() != null) {

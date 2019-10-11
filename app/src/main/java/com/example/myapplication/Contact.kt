@@ -13,11 +13,13 @@ data class Contact(
 ) {
 
     @PrimaryKey
-    var contact: String = ""
+    var id: String = ""
     @Ignore
     var participate: Boolean = false
     @Ignore
     var permission: Int = 0
     @Ignore
     var checked: Boolean = false
+    @Ignore
+    var contact: String = ""
 }

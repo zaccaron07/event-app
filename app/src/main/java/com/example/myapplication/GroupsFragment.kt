@@ -52,7 +52,7 @@ class GroupsFragment : Fragment() {
         GlobalScope.launch {
             contact = db?.contactDao()?.getContact()!!
 
-            var url = "${APIConstants.BASE_URL}/contact/${contact?.contact}/group"
+            var url = "${APIConstants.BASE_URL}/contact/${contact?.id}/group"
 
             val request = JsonArrayRequest(
                 Request.Method.GET, url, null,
@@ -82,7 +82,7 @@ class GroupsFragment : Fragment() {
         (context as HomeActivity).startActivity(
             GroupDetailActivity::class.java,
             groupData,
-            this.contact.contact
+            this.contact.id
         )
     }
 

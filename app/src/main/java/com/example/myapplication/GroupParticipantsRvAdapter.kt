@@ -36,8 +36,9 @@ class GroupParticipantsRvAdapter(
             contactId: String
         ) {
             itemView.tvName.text = contact.name
-            itemView.switchParticipate.isEnabled = (contact.contact == contactId)
+            itemView.switchParticipate.isEnabled = (contact.id == contactId)
             itemView.switchParticipate.isChecked = contact.participate
+            contact.contact = contact.id
             itemView.setOnClickListener {
                 clickListener(
                     contact,

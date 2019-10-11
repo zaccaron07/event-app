@@ -34,7 +34,7 @@ class GroupUtils {
         groupTemp.contacts.forEach {
             var contact = Contact(it.contact.name, it.contact.phoneNumber)
 
-            contact.contact = it.contact.id
+            contact.id = it.contact.id
             contact.participate = it.participate
             contact.permission = it.permission
 

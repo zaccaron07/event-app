@@ -40,6 +40,7 @@ class AddContactActivity : AppCompatActivity() {
     private var contactListWithId: ArrayList<Contact> = ArrayList()
     private val REQUEST_READ_CONTACTS = 100
     private var db: AppDatabase? = null
+    private var stateAreaCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,14 @@ class AddContactActivity : AppCompatActivity() {
 
         group = intent.extras?.getString("group")?.let { Json.parse(Group.serializer(), it) }
 
-        this.loadContacts()
+        GlobalScope.launch {
+            var myContact = db?.contactDao()?.getContact()
+
+            stateAreaCode = myContact?.phoneNumber?.substring(3, 5)
+
+            loadContacts()
+        }
+
         this.addMyContactToGroup()
 
         this.floatingActionButtonDone.setOnClickListener {
@@ -64,6 +72,7 @@ class AddContactActivity : AppCompatActivity() {
             var myContact = db?.contactDao()?.getContact()
 
             if (myContact != null) {
+                myContact.contact = myContact.id
                 group?.contacts?.add(myContact)
             }
         }
@@ -81,21 +90,24 @@ class AddContactActivity : AppCompatActivity() {
         } else {
             contactList = getContacts()
             getContactsWithLogin()
-
-            val rvContactDetail = this.rvContactDetail
-            rvContactDetail.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
-            val rvAdapter =
-                ContactRvAdapter(contactList) { contactDetail: Contact, checkBoxContact: CheckBox ->
-                    partItemClicked(contactDetail, checkBoxContact)
-                }
-            rvContactDetail.adapter = rvAdapter
         }
     }
 
+    private fun initializeListView() {
+        val rvContactDetail = this.rvContactDetail
+        rvContactDetail.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+        val rvAdapter =
+            ContactRvAdapter(contactList) { contactDetail: Contact, checkBoxContact: CheckBox ->
+                partItemClicked(contactDetail, checkBoxContact)
+            }
+        rvContactDetail.adapter = rvAdapter
+    }
+
     private fun partItemClicked(contact: Contact, checkBoxContact: CheckBox) {
-        if (contact.contact != "") {
+        if (contact.id != "") {
             contact.checked = !contact.checked
+            contact.contact = contact.id
             checkBoxContact.isChecked = contact.checked
 
             if (contact.checked) {
@@ -128,9 +140,11 @@ class AddContactActivity : AppCompatActivity() {
 
     private fun synchronizeContactsId() {
         this.contactListWithId.forEach { contact ->
-            this.contactList.find { it.phoneNumber == contact.phoneNumber }?.contact =
-                contact.contact
+            this.contactList.find { it.phoneNumber == contact.phoneNumber }?.id =
+                contact.id
         }
+
+        this.contactList.sortBy { contact -> contact.name }
     }
 
     private fun getContactsWithLogin() {
@@ -139,11 +153,7 @@ class AddContactActivity : AppCompatActivity() {
 
         var uriParam = "?phoneNumber="
         this.contactList.forEach {
-            var phoneNumber = if (it.phoneNumber.startsWith(
-                    "+",
-                    true
-                )
-            ) it.phoneNumber else getIsoPrefix() + it.phoneNumber
+            var phoneNumber = it.phoneNumber
 
             phoneNumber = phoneNumber.replace("+", "%2B")
 
@@ -160,6 +170,7 @@ class AddContactActivity : AppCompatActivity() {
                     initContactsIdList(response)
                     synchronizeContactsId()
                 }
+                this.initializeListView()
             },
             Response.ErrorListener { error ->
                 Log.d("groupsFragment", error.toString())
@@ -209,12 +220,14 @@ class AddContactActivity : AppCompatActivity() {
                             cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                         )
 
-                        phoneNumValue = removeNonDigit(phoneNumValue)
-
                         if (phoneNumValue.length >= 8) {
-                            val contact = Contact(name, phoneNumValue)
+                            phoneNumValue = formatNumber(phoneNumValue)
 
-                            contactsList.add(contact)
+                            if (phoneNumValue != "") {
+                                val contact = Contact(name, phoneNumValue)
+
+                                contactsList.add(contact)
+                            }
                         }
                     }
                     cursorPhone.close()
@@ -237,13 +250,53 @@ class AddContactActivity : AppCompatActivity() {
             .setTitle("Atenção")
             .apply {
                 setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, id ->
-
                 })
             }
 
         builder
             .create()
             .show()
+    }
+
+    private fun formatNumber(phoneNumber: String): String {
+        var newPhoneNumber = phoneNumber
+
+        try {
+            newPhoneNumber = if (newPhoneNumber.startsWith(
+                    "+",
+                    true
+                )
+            ) newPhoneNumber else getIsoPrefix() + newPhoneNumber
+
+            var phoneNumberFormat = PhoneNumberUtil.getInstance().parse(newPhoneNumber, "BR")
+
+            var nationalPhoneNumber = phoneNumberFormat.nationalNumber.toString()
+
+            if (phoneNumberFormat.countryCode.toString() == "55") {
+                if (nationalPhoneNumber.length == 8) {
+                    nationalPhoneNumber = "9$nationalPhoneNumber"
+                }
+
+                if (nationalPhoneNumber.length == 9) {
+                    nationalPhoneNumber = addStateAreaCode(nationalPhoneNumber)
+                }
+
+                if (nationalPhoneNumber.length == 10) {
+                    nationalPhoneNumber =
+                        "${nationalPhoneNumber.substring(0, 2)}9${nationalPhoneNumber.substring(2)}"
+                }
+            }
+
+            newPhoneNumber = "+${phoneNumberFormat.countryCode}$nationalPhoneNumber"
+        } catch (ex: Exception) {
+            newPhoneNumber = ""
+        }
+
+        return newPhoneNumber
+    }
+
+    private fun addStateAreaCode(phoneNumber: String): String {
+        return "${this.stateAreaCode}$phoneNumber"
     }
 
     private fun removeNonDigit(phoneNumber: String): String {
@@ -262,7 +315,7 @@ class AddContactActivity : AppCompatActivity() {
         val countryIso =
             (applicationContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).networkCountryIso.toUpperCase()
 
-        return PhoneNumberUtil.getInstance().getCountryCodeForRegion(countryIso).toString()
+        return "+${PhoneNumberUtil.getInstance().getCountryCodeForRegion(countryIso)}"
     }
 
     private fun saveGroup() {

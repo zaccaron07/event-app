@@ -75,9 +75,10 @@ class ContactProfileFragment : Fragment() {
                 val jsonObjectRequest = JsonObjectRequest(
                     Request.Method.POST, url, jsonObject,
                     Response.Listener { response ->
-                        contact?.contact = response.get("id").toString()
+                        contact?.id = response.get("id").toString()
                         GlobalScope.launch {
                             db?.contactDao()?.insertContact(contact!!)
+                            (activity as HomeActivity).replaceFragment(GroupsFragment.newInstance())
                         }
                     },
                     Response.ErrorListener { error ->

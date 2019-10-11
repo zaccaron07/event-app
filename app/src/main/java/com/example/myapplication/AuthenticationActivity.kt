@@ -39,6 +39,10 @@ class AuthenticationActivity : AppCompatActivity() {
             Log.d("errorL", loginResult.error?.errorType?.message)
         } else {
             Log.d("sucessoL", loginResult?.toString())
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("firstLogin", true)
+
+            this.startActivity(intent)
         }
     }
 }
