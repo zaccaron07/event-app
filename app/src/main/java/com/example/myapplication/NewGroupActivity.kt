@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_group_detail.toolbar
 import kotlinx.android.synthetic.main.activity_new_group.*
 import kotlinx.serialization.json.Json
-import java.util.*
+import java.util.Calendar
 
 class NewGroupActivity : AppCompatActivity() {
 
@@ -40,7 +40,6 @@ class NewGroupActivity : AppCompatActivity() {
         this.editTextDate.setOnClickListener {
             showDatePickerDialog()
         }
-
     }
 
     private fun startActivity(activityClass: Class<*>, data: String = "") {
@@ -48,7 +47,6 @@ class NewGroupActivity : AppCompatActivity() {
         intent.putExtra("group", data)
         this.startActivity(intent)
     }
-
 
     private fun showTimePickerDialog() {
         val c = Calendar.getInstance()
@@ -73,11 +71,10 @@ class NewGroupActivity : AppCompatActivity() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-
         val dpd = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                val currentDate = String.format("%02d/%02d/${year}", dayOfMonth, monthOfYear)
+                val currentDate = String.format("%02d/%02d/$year", dayOfMonth, monthOfYear)
                 this.editTextDate.setText(currentDate)
             },
             year,

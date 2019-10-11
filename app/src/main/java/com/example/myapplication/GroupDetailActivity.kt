@@ -38,8 +38,7 @@ class GroupDetailActivity : AppCompatActivity() {
         this.initializeGroup()
     }
 
-    private fun initializeGroup(
-    ) {
+    private fun initializeGroup() {
         textViewName.text = this.group.name
         textViewDescription.text = this.group.description
         textViewStartTime.text = this.group.startTime

@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.accountkit.AccountKit
 import kotlinx.coroutines.Dispatchers

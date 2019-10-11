@@ -32,7 +32,6 @@ import kotlinx.serialization.list
 import org.json.JSONArray
 import org.json.JSONObject
 
-
 class AddContactActivity : AppCompatActivity() {
 
     private var group: Group? = null
@@ -122,7 +121,8 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>,
+        requestCode: Int,
+        permissions: Array<out String>,
         grantResults: IntArray
     ) {
         if (requestCode == REQUEST_READ_CONTACTS) {
@@ -188,7 +188,7 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     private fun getContacts(): ArrayList<Contact> {
-        val resolver: ContentResolver = contentResolver;
+        val resolver: ContentResolver = contentResolver
         var contactsList: ArrayList<Contact> = ArrayList()
         val cursor = resolver.query(
             ContactsContract.Contacts.CONTENT_URI, null, null, null,
