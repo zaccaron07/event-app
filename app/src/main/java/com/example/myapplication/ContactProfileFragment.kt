@@ -3,25 +3,13 @@ package com.example.myapplication
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import com.facebook.accountkit.Account
-import com.facebook.accountkit.AccountKit
-import com.facebook.accountkit.AccountKitCallback
-import com.facebook.accountkit.AccountKitError
-import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import org.json.JSONObject
 
 class ContactProfileFragment : Fragment() {
 
@@ -60,39 +48,33 @@ class ContactProfileFragment : Fragment() {
     }
 
     private fun saveUser() {
-        contact?.name = editTextName.text.toString()
+        /*contact?.name = editTextName.text.toString()
 
-        AccountKit.getCurrentAccount(object : AccountKitCallback<Account> {
-            override fun onSuccess(account: Account) {
-                val phoneNumber = account.phoneNumber.toString()
-                contact?.phoneNumber = phoneNumber
+        val currentUser = FirebaseAuth.getInstance().currentUser;
 
-                val queue = Volley.newRequestQueue(context)
-                val url = "${APIConstants.BASE_URL}/contact"
+        contact?.phoneNumber = currentUser?.phoneNumber!!
 
-                val jsonData = Json.stringify(Contact.serializer(), contact!!)
-                val jsonObject = JSONObject(jsonData)
+        val url = "${APIConstants.BASE_URL}/contact"
 
-                val jsonObjectRequest = JsonObjectRequest(
-                    Request.Method.POST, url, jsonObject,
-                    Response.Listener { response ->
-                        contact?.id = response.get("id").toString()
-                        GlobalScope.launch {
-                            db?.contactDao()?.insertContact(contact!!)
-                            (activity as HomeActivity).replaceFragment(GroupsFragment.newInstance())
-                        }
-                    },
-                    Response.ErrorListener { error ->
-                        Log.d(LOG_TAG, error.toString())
-                    })
+        val jsonData = Json.stringify(Contact.serializer(), contact!!)
+        val jsonObject = JSONObject(jsonData)
 
-                queue.add(jsonObjectRequest)
-            }
+        val queue = Volley.newRequestQueue(context)
 
-            override fun onError(error: AccountKitError) {
-                // Handle Error
-            }
-        })
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            Response.Listener { response ->
+                contact?.id = response.get("id").toString()
+                GlobalScope.launch {
+                    db?.contactDao()?.insertContact(contact!!)
+                    (activity as HomeActivity).replaceFragment(GroupsFragment.newInstance())
+                }
+            },
+            Response.ErrorListener { error ->
+                Log.d(LOG_TAG, error.toString())
+            })
+
+        queue.add(jsonObjectRequest)*/
     }
 
     override fun onAttach(context: Context) {

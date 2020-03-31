@@ -37,10 +37,8 @@
                 android:name=".HomeActivity"
                 android:label="@string/title_activity_home"
                 android:theme="@style/AppTheme" />
-        <activity android:name=".AuthenticationActivity" />
         <activity
-                android:name=".MainActivity"
-                android:noHistory="true">
+                android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,17 +46,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-                android:name="com.facebook.accountkit.ApplicationName"
-                android:value="@string/app_name" />
-        <meta-data
-                android:name="com.facebook.sdk.ApplicationId"
-                android:value="@string/FACEBOOK_APP_ID" />
-        <meta-data
-                android:name="com.facebook.accountkit.ClientToken"
-                android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
-
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
     </application>
 
 </manifest>
