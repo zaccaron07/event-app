@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.model.Group
 import kotlinx.android.synthetic.main.activity_group_detail.toolbar
 import kotlinx.android.synthetic.main.activity_new_group.*
 import kotlinx.serialization.json.Json

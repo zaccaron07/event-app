@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.model.Contact
 import kotlinx.android.synthetic.main.contact_detail_adapter_item_layout.view.*
 
 class ContactRvAdapter(

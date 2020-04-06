@@ -5,11 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.model.Contact
 import kotlinx.android.synthetic.main.contact_detail_adapter_item_layout.view.tvName
 import kotlinx.android.synthetic.main.group_participants_adapter_item_layout.view.*
 
 class GroupParticipantsRvAdapter(
-    private val contactList: ArrayList<Contact>,
+    private val contactList: MutableList<Contact>,
     private val clickListener: (Contact, Switch) -> Unit,
     private val contactId: String
 ) :

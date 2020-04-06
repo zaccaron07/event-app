@@ -1,10 +1,13 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.ContactProfileFragment
+import com.example.myapplication.ui.group.GroupsFragment
+import com.example.myapplication.R
 
 class HomeActivity : AppCompatActivity(),
     ContactProfileFragment.OnFragmentInteractionListener,

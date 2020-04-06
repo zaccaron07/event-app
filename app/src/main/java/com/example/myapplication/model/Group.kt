@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.model
 
 import kotlinx.serialization.Serializable
 
@@ -10,5 +10,5 @@ data class Group(
     var date: String = ""
 ) {
     var id: String = ""
-    var contacts: ArrayList<Contact> = ArrayList()
+    var contacts: List<Contact> = listOf()
 }

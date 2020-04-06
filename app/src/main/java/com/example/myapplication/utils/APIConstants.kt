@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.utils
 
 object APIConstants {
     const val BASE_URL = "https://gg-event-api.herokuapp.com"

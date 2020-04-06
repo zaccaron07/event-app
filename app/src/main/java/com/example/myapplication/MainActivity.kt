@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.model.Contact
+import com.example.myapplication.model.database.AppDatabase
+import com.example.myapplication.ui.HomeActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.PhoneBuilder
 import com.firebase.ui.auth.ErrorCodes
