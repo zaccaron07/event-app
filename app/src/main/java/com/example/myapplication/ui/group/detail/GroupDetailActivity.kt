@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.group.detail
 
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,10 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.myapplication.R
+import com.example.myapplication.data.model.Contact
+import com.example.myapplication.data.model.Group
+import com.example.myapplication.utils.APIConstants
 import kotlinx.android.synthetic.main.activity_group_detail.*
 import kotlinx.android.synthetic.main.content_group_detail.*
 import kotlinx.serialization.json.Json
@@ -48,7 +52,7 @@ class GroupDetailActivity : AppCompatActivity() {
         rvGroupParticipants.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         val rvAdapter =
-            GroupParticipantsRvAdapter(this.group.contacts, { contact, switchParticipate ->
+            GroupParticipantsAdapter(this.group.contacts, { contact, switchParticipate ->
                 partItemClicked(contact, switchParticipate)
             }, this.contactId)
 

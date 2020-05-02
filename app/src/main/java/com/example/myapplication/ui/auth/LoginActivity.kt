@@ -1,58 +1,55 @@
-package com.example.myapplication
+package com.example.myapplication.ui.auth
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.model.Contact
-import com.example.myapplication.model.database.AppDatabase
+import com.example.myapplication.R
+import com.example.myapplication.data.model.Contact
 import com.example.myapplication.ui.HomeActivity
+import com.example.myapplication.utils.Coroutines
+import com.example.myapplication.utils.extension.kodeinViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.PhoneBuilder
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
 
-class MainActivity : AppCompatActivity() {
-    private var db: AppDatabase? = null
+class LoginActivity : AppCompatActivity(), KodeinAware {
+    override val kodein by kodein()
+
+    private val viewModel: AuthViewModel by kodeinViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = AppDatabase.invoke(this)
-
-        findUser()
+        decideNextActivity()
     }
 
     private fun insertContact() {
         var contact = Contact("Gabriel", "+5548998176127")
         contact.id = "5d8678bbcb6e470017c9bd95"
 
-        GlobalScope.launch {
-            db?.contactDao()?.insertContact(contact)
+        Coroutines.io {
+            viewModel.insertContact(contact)
         }
     }
 
     private fun deleteContact() {
-        GlobalScope.launch {
-            db?.contactDao()?.deleteContact()
+        Coroutines.io {
+            viewModel.deleteContact()
         }
 
         AuthUI.getInstance()
             .signOut(this)
     }
 
-    private fun findUser() {
-        GlobalScope.launch {
-            val auth = FirebaseAuth.getInstance()
-            val contact = withContext(Dispatchers.Default) {
-                db?.contactDao()?.getContact()
-            }
+    private fun decideNextActivity() {
+        Coroutines.io {
+            val auth = viewModel.getFirebaseAuth()
+            val contact = viewModel.getContact()
 
             if (contact != null) {
                 goToHome()
@@ -85,7 +82,8 @@ class MainActivity : AppCompatActivity() {
                 .setAvailableProviders(
                     listOf(phoneConfigWithDefaultNumber)
                 )
-                .build(), RC_SIGN_IN
+                .build(),
+            RC_SIGN_IN
         )
     }
 

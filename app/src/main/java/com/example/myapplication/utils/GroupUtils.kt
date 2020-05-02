@@ -1,8 +1,8 @@
 package com.example.myapplication.utils
 
-import com.example.myapplication.model.Contact
-import com.example.myapplication.model.Group
-import com.example.myapplication.model.GroupDTO
+import com.example.myapplication.data.model.Contact
+import com.example.myapplication.data.model.Group
+import com.example.myapplication.data.model.GroupDTO
 
 class GroupUtils {
 

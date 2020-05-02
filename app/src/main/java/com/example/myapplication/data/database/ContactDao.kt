@@ -1,10 +1,10 @@
-package com.example.myapplication.model
+package com.example.myapplication.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.reactivex.Single
+import com.example.myapplication.data.model.Contact
 
 @Dao
 interface ContactDao {
@@ -12,7 +12,7 @@ interface ContactDao {
     fun insertContact(vararg contact: Contact)
 
     @Query("SELECT * FROM Contact")
-    fun getContact(): Single<Contact>
+    fun getContact(): Contact
 
     @Query("DELETE FROM Contact")
     fun deleteContact()

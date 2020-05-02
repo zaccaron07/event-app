@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.model.Group
+import com.example.myapplication.data.model.Group
 import kotlinx.android.synthetic.main.adapter_item_layout.view.*
 
 typealias ClickListener = (Group) -> Unit

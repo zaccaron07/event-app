@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.group.add
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -6,41 +6,54 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.model.Group
-import kotlinx.android.synthetic.main.activity_group_detail.toolbar
-import kotlinx.android.synthetic.main.activity_new_group.*
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import com.example.myapplication.R
+import com.example.myapplication.data.model.Group
+import com.example.myapplication.databinding.ActivityNewGroupBinding
+import com.example.myapplication.ui.contact.AddContactActivity
+import com.example.myapplication.ui.group.GroupsViewModel
+import com.example.myapplication.utils.extension.kodeinViewModel
 import kotlinx.serialization.json.Json
-import java.util.Calendar
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import java.util.*
 
-class NewGroupActivity : AppCompatActivity() {
+class NewGroupActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+
+    private val viewModel: GroupsViewModel by kodeinViewModel()
+    private lateinit var binding: ActivityNewGroupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_group)
-        setSupportActionBar(toolbar)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_new_group)
+
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        this.floatingActionButtonAddContacts.setOnClickListener {
-            val group = Group(
-                editTextName.text.toString(),
-                editTextDescription.text.toString(),
-                editTextStartTime.text.toString(),
-                editTextDate.text.toString()
-            )
+        viewModel.timePickerDialogData.observe(this, Observer { data ->
+            if (data) {
+                showTimePickerDialog()
+            }
+        })
 
+        viewModel.datePickerDialogData.observe(this, Observer { data ->
+            if (data) {
+                showDatePickerDialog()
+            }
+        })
+
+        viewModel.addGroupData.observe(this, Observer { data ->
             this.startActivity(
                 AddContactActivity::class.java,
-                Json.stringify(Group.serializer(), group)
+                Json.stringify(Group.serializer(), viewModel.group)
             )
-        }
+        })
 
-        this.editTextStartTime.setOnClickListener {
-            showTimePickerDialog()
-        }
-
-        this.editTextDate.setOnClickListener {
-            showDatePickerDialog()
-        }
+        binding.viewmodel = viewModel
     }
 
     private fun startActivity(activityClass: Class<*>, data: String = "") {
@@ -58,7 +71,7 @@ class NewGroupActivity : AppCompatActivity() {
             this,
             TimePickerDialog.OnTimeSetListener { view, hour, minute ->
                 val currentTime = String.format("%02d:%02d", hour, minute)
-                this.editTextStartTime.setText(currentTime)
+                binding.editTextStartTime.setText(currentTime)
             },
             hour,
             minute,
@@ -76,7 +89,7 @@ class NewGroupActivity : AppCompatActivity() {
             this,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 val currentDate = String.format("%02d/%02d/$year", dayOfMonth, monthOfYear)
-                this.editTextDate.setText(currentDate)
+                binding.editTextDate.setText(currentDate)
             },
             year,
             month,

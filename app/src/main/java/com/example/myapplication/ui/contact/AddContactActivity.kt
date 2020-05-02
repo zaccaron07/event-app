@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.contact
 
 import android.Manifest
 import android.app.AlertDialog
@@ -22,23 +22,33 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.myapplication.R
+import com.example.myapplication.data.model.Contact
+import com.example.myapplication.data.model.Group
+import com.example.myapplication.ui.HomeActivity
+import com.example.myapplication.utils.APIConstants
+import com.example.myapplication.utils.Coroutines
+import com.example.myapplication.utils.extension.kodeinViewModel
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import kotlinx.android.synthetic.main.activity_add_contact.*
 import kotlinx.android.synthetic.main.content_add_contact.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.list
 import org.json.JSONArray
 import org.json.JSONObject
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
 
-class AddContactActivity : AppCompatActivity() {
+class AddContactActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+
+    private val viewModel: ContactViewModel by kodeinViewModel()
 
     private var group: Group? = null
     private var contactList: ArrayList<Contact> = ArrayList()
     private var contactListWithId: ArrayList<Contact> = ArrayList()
     private val REQUEST_READ_CONTACTS = 100
-    private var db: AppDatabase? = null
     private var stateAreaCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +57,10 @@ class AddContactActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        db = AppDatabase.invoke(this)
-
         group = intent.extras?.getString("group")?.let { Json.parse(Group.serializer(), it) }
 
-        GlobalScope.launch {
-            var myContact = db?.contactDao()?.getContact()
+        Coroutines.io {
+            val myContact = viewModel.getCurrentContact()
 
             stateAreaCode = myContact?.phoneNumber?.substring(3, 5)
 
@@ -67,13 +75,12 @@ class AddContactActivity : AppCompatActivity() {
     }
 
     private fun addMyContactToGroup() {
-        GlobalScope.launch {
-            var myContact = db?.contactDao()?.getContact()
+        Coroutines.io {
+            val myContact = viewModel.getCurrentContact()
 
-            if (myContact != null) {
-                myContact.contact = myContact.id
-                group?.contacts?.add(myContact)
-            }
+            myContact.contact = myContact.id
+
+            group?.contacts?.add(myContact)
         }
     }
 
