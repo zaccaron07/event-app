@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.app.Application
+import android.content.ContentResolver
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.injection.ViewModelFactory
 import com.example.myapplication.data.database.AppDatabase
@@ -32,6 +33,7 @@ class EventApplication : Application(), KodeinAware {
 
         bind() from singleton { AppDatabase(instance()) }
         bind<Retrofit.Builder>() with provider { Retrofit.Builder() }
+        bind<ContentResolver>() with singleton { contentResolver }
         bind<Retrofit>() with singleton {
             instance<Retrofit.Builder>()
                 .baseUrl(APIConstants.BASE_URL)
@@ -45,7 +47,7 @@ class EventApplication : Application(), KodeinAware {
             instance<Retrofit>().create(ContactApi::class.java)
         }
         bind() from singleton { GroupRepository(instance()) }
-        bind() from singleton { ContactRepository(instance(), instance()) }
+        bind() from singleton { ContactRepository(instance(), instance(), instance()) }
         bind<ViewModelProvider.Factory>() with singleton { ViewModelFactory(kodein.direct) }
         bindViewModel<AuthViewModel>() with provider {
             AuthViewModel(instance())
@@ -57,7 +59,7 @@ class EventApplication : Application(), KodeinAware {
             ContactProfileViewModel(instance())
         }
         bindViewModel<ContactViewModel>() with provider {
-            ContactViewModel(instance())
+            ContactViewModel(instance(), instance())
         }
     }
 

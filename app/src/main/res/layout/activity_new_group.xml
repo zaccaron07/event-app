@@ -44,8 +44,8 @@
                 android:ems="10"
                 android:hint="Nome"
                 android:inputType="textPersonName"
-                android:textSize="16dp"
                 android:text="@={viewmodel.group.name}"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
@@ -60,8 +60,8 @@
                 android:ems="10"
                 android:hint="Descrição"
                 android:inputType="textPersonName"
-                android:textSize="16dp"
                 android:text="@={viewmodel.group.description}"
+                android:textSize="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextName" />

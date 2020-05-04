@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.profile
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +19,6 @@ class ContactProfileFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
 
-    private var listener: OnFragmentInteractionListener? = null
     private val viewModel: ContactProfileViewModel by kodeinViewModel()
 
     override fun onCreateView(
@@ -41,24 +38,6 @@ class ContactProfileFragment : Fragment(), KodeinAware {
         binding.viewmodel = viewModel
 
         return binding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface OnFragmentInteractionListener {
-        fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {

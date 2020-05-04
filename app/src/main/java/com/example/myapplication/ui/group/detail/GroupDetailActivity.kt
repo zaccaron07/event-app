@@ -1,86 +1,64 @@
 package com.example.myapplication.ui.group.detail
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.myapplication.R
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.data.model.Group
-import com.example.myapplication.utils.APIConstants
+import com.example.myapplication.databinding.ActivityGroupDetailBinding
+import com.example.myapplication.ui.group.GroupsViewModel
+import com.example.myapplication.utils.extension.kodeinViewModel
 import kotlinx.android.synthetic.main.activity_group_detail.*
-import kotlinx.android.synthetic.main.content_group_detail.*
 import kotlinx.serialization.json.Json
-import org.json.JSONObject
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
 
-class GroupDetailActivity : AppCompatActivity() {
-    private lateinit var group: Group
-    private lateinit var contactId: String
-    private val LOG_TAG = "GroupDetailActivity"
+class GroupDetailActivity : AppCompatActivity(), KodeinAware, RecyclerViewGroupDetailClickListener {
+    override val kodein by kodein()
+
+    private val viewModel: GroupsViewModel by kodeinViewModel()
+    private lateinit var binding: ActivityGroupDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_detail)
-        setSupportActionBar(toolbar)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_group_detail)
+
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fab.setOnClickListener { view ->
-            this.save()
-        }
-
-        this.group =
+        viewModel.selectedGroup =
             intent.extras!!.getString("group").let { Json.parse(Group.serializer(), it!!) }
-        this.contactId = intent.extras!!.getString("contactId")!!
+
+        viewModel.currentContactId = intent.extras!!.getString("contactId")!!
+        viewModel.groupDetailSaved.observe(this, Observer { groupDetailSaved ->
+            if (groupDetailSaved) {
+                Toast.makeText(this, "Grupo atualizado!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        })
+
+        binding.viewmodel = viewModel
 
         this.initializeGroup()
     }
 
     private fun initializeGroup() {
-        textViewName.text = this.group.name
-        textViewDescription.text = this.group.description
-        textViewStartTime.text = this.group.startTime
-        textViewDate.text = this.group.date
-
         val rvGroupParticipants = this.rvGroupParticipants
         rvGroupParticipants.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         val rvAdapter =
-            GroupParticipantsAdapter(this.group.contacts, { contact, switchParticipate ->
-                partItemClicked(contact, switchParticipate)
-            }, this.contactId)
+            GroupDetailAdapter(viewModel.selectedGroup.contacts, this, viewModel.currentContactId)
 
         rvGroupParticipants.adapter = rvAdapter
     }
 
-    private fun partItemClicked(contact: Contact, switchParticipate: Switch) {
+    override fun onRecyclerViewItemClick(contact: Contact) {
         contact.participate = !contact.participate
-        switchParticipate.isChecked = contact.participate
-    }
-
-    private fun save() {
-        val queue = Volley.newRequestQueue(this)
-        var url = "${APIConstants.BASE_URL}/group?contactId=${this.contactId}"
-
-        val jsonData = Json.stringify(Group.serializer(), this.group)
-        val jsonObject = JSONObject(jsonData)
-
-        val request = JsonObjectRequest(
-            Request.Method.PUT, url, jsonObject,
-            Response.Listener {
-                Toast.makeText(this, "Grupo atualizado!", Toast.LENGTH_SHORT).show()
-                finish()
-            },
-            Response.ErrorListener { error ->
-                Log.d(LOG_TAG, error.toString())
-            })
-
-        queue.add(request)
     }
 }

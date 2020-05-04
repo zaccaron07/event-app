@@ -8,10 +8,10 @@ import com.example.myapplication.R
 import com.example.myapplication.data.model.Group
 import kotlinx.android.synthetic.main.adapter_item_layout.view.*
 
-typealias ClickListener = (Group) -> Unit
-
-class RvAdapter(private val clickListener: ClickListener) :
-    RecyclerView.Adapter<RvAdapter.ViewHolder>() {
+class GroupsAdapter(
+    private val listener: RecyclerViewGroupsClickListener
+) :
+    RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
     private lateinit var userList: List<Group>
 
     fun updateGroupList(groupList: List<Group>) {
@@ -24,7 +24,7 @@ class RvAdapter(private val clickListener: ClickListener) :
             LayoutInflater.from(p0.context).inflate(R.layout.adapter_item_layout, p0, false)
         val viewHolder = ViewHolder(itemContainer)
         itemContainer.setOnClickListener {
-            clickListener(userList[viewHolder.adapterPosition])
+            listener.onRecyclerViewItemClick(userList[viewHolder.adapterPosition])
         }
 
         return viewHolder

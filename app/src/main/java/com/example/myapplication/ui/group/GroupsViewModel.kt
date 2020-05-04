@@ -19,6 +19,7 @@ class GroupsViewModel(
     lateinit var contact: Contact
 
     private lateinit var job: Job
+    private lateinit var jobSaveGroupDetail: Job
 
     private val _groups = MutableLiveData<List<Group>>()
     val groups: LiveData<List<Group>>
@@ -27,6 +28,10 @@ class GroupsViewModel(
     var timePickerDialogData = MutableLiveData<Boolean>()
     var datePickerDialogData = MutableLiveData<Boolean>()
     var addGroupData = MutableLiveData<Boolean>()
+
+    var selectedGroup = Group()
+    lateinit var currentContactId: String
+    var groupDetailSaved = MutableLiveData<Boolean>()
 
     var group = Group()
 
@@ -38,6 +43,7 @@ class GroupsViewModel(
         super.onCleared()
 
         if (::job.isInitialized) job.cancel()
+        if (::jobSaveGroupDetail.isInitialized) jobSaveGroupDetail.cancel()
     }
 
     private fun getUserGroups() {
@@ -76,4 +82,10 @@ class GroupsViewModel(
         addGroupData.value = true
     }
 
+    fun saveGroupDetail() {
+        jobSaveGroupDetail = Coroutines.ioThenMain(
+            { groupRepository.updateGroupDetail(currentContactId, selectedGroup) },
+            { groupDetailSaved.value = true }
+        )
+    }
 }

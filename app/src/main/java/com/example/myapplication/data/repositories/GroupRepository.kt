@@ -1,5 +1,6 @@
 package com.example.myapplication.data.repositories
 
+import com.example.myapplication.data.model.Group
 import com.example.myapplication.network.GroupApi
 
 class GroupRepository(
@@ -7,4 +8,7 @@ class GroupRepository(
 ) : SafeApiRequest() {
 
     suspend fun getGroups(id: String) = apiRequest { groupApi.getGroups(id) }
+    suspend fun updateGroupDetail(contactId: String, group: Group) =
+        apiRequest { groupApi.updateGroupDetail(contactId, group) }
+    suspend fun saveGroup(group: Group) = apiRequest { groupApi.saveGroup(group) }
 }
