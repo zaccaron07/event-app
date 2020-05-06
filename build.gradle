@@ -8,6 +8,7 @@ buildscript {
     ext.lifecycle_version = '1.1.1'
     ext.room_version = '2.2.5'
     ext.kodein_version = '6.5.5'
+    ext.nav_version = '2.3.0-alpha06'
 
     repositories {
         google()

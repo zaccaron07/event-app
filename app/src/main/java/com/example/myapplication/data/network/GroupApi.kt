@@ -1,4 +1,4 @@
-package com.example.myapplication.network
+package com.example.myapplication.data.network
 
 import com.example.myapplication.data.model.Group
 import com.example.myapplication.data.model.GroupDTO
@@ -15,4 +15,6 @@ interface GroupApi {
 
     @POST("/group")
     suspend fun saveGroup(@Body() group: Group): Response<Any>
+
+
 }

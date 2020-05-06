@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentUserProfileBinding
-import com.example.myapplication.ui.HomeActivity
-import com.example.myapplication.ui.group.GroupsFragment
 import com.example.myapplication.utils.extension.kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -31,22 +30,12 @@ class ContactProfileFragment : Fragment(), KodeinAware {
 
         viewModel.success.observe(viewLifecycleOwner, Observer { success ->
             if (success) {
-                (activity as HomeActivity).replaceFragment(GroupsFragment.newInstance())
+                findNavController().navigate(R.id.action_contactProfileFragment_to_groupsFragment)
             }
         })
 
         binding.viewmodel = viewModel
 
         return binding.root
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            ContactProfileFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
     }
 }

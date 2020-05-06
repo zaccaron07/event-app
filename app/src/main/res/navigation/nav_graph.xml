@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nav_graph"
+        app:startDestination="@id/splashFragment">
+
+    <fragment
+            android:id="@+id/splashFragment"
+            android:name="com.example.myapplication.ui.splash.SplashFragment"
+            android:label="fragment_splash"
+            tools:layout="@layout/fragment_splash">
+        <action
+                android:id="@+id/action_splashFragment_to_groupsFragment"
+                app:destination="@id/groupsFragment" />
+        <action
+                android:id="@+id/action_splashFragment_to_loginFragment"
+                app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/groupsFragment"
+            android:name="com.example.myapplication.ui.group.GroupsFragment"
+            android:label="Eventos">
+        <action
+                android:id="@+id/action_groupsFragment_to_groupFragment"
+                app:destination="@id/groupFragment" />
+        <action
+                android:id="@+id/action_groupsFragment_to_groupDetailFragment"
+                app:destination="@id/groupDetailFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.example.myapplication.ui.auth.LoginFragment"
+            android:label="LoginFragment">
+        <action
+                android:id="@+id/action_loginFragment_to_contactProfileFragment"
+                app:destination="@id/contactProfileFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/contactProfileFragment"
+            android:name="com.example.myapplication.ui.profile.ContactProfileFragment"
+            android:label="ContactProfileFragment">
+        <action
+                android:id="@+id/action_contactProfileFragment_to_groupsFragment"
+                app:destination="@id/groupsFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/groupFragment"
+            android:name="com.example.myapplication.ui.group.add.GroupFragment"
+            android:label="GroupFragment"
+            tools:layout="@layout/fragment_group">
+        <action
+                android:id="@+id/action_groupFragment_to_contactFragment"
+                app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/contactFragment"
+            android:name="com.example.myapplication.ui.contact.ContactFragment"
+            android:label="ContactFragment">
+        <action
+                android:id="@+id/action_contactFragment_to_groupsFragment"
+                app:destination="@id/groupsFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/groupDetailFragment"
+            android:name="com.example.myapplication.ui.group.detail.GroupDetailFragment"
+            android:label="fragment_group_detail"
+            tools:layout="@layout/fragment_group_detail" />
+</navigation>

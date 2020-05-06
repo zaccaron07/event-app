@@ -15,31 +15,9 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
         <activity
-                android:name=".ui.contact.AddContactActivity"
-                android:label="@string/title_activity_add_contact"
-                android:noHistory="true"
-                android:parentActivityName=".ui.group.add.NewGroupActivity"
-                android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.example.myapplication.ui.group.add.NewGroupActivity" />
-        </activity>
-        <activity
-                android:name=".ui.group.add.NewGroupActivity"
-                android:label="@string/title_activity_new_event"
-                android:parentActivityName=".ui.HomeActivity"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-                android:name=".ui.group.detail.GroupDetailActivity"
-                android:label="@string/title_activity_group_detail"
-                android:parentActivityName=".ui.HomeActivity"
-                android:theme="@style/AppTheme.NoActionBar" />
-        <activity
                 android:name=".ui.HomeActivity"
                 android:label="@string/title_activity_home"
-                android:theme="@style/AppTheme" />
-        <activity
-                android:name=".ui.auth.LoginActivity">
+                android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

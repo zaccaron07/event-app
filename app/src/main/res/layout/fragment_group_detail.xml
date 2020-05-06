@@ -15,7 +15,7 @@
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.group.detail.GroupDetailActivity">
+            tools:context=".ui.group.detail.GroupDetailFragment">
 
         <TextView
                 android:id="@+id/textViewLabelDate"
@@ -26,24 +26,6 @@
                 android:text="Quando:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewStartTime" />
-
-        <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
                 android:id="@+id/textView3"
@@ -58,7 +40,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvGroupParticipants"
+                android:id="@+id/recyclerViewGroupParticipants"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
@@ -77,10 +59,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:onClick="@{() -> viewmodel.saveGroupDetail()}"
                 app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_done_24dp" />
 
         <TextView

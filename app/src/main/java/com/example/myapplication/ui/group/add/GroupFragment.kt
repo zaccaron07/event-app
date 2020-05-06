@@ -2,64 +2,57 @@ package com.example.myapplication.ui.group.add
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.myapplication.R
-import com.example.myapplication.data.model.Group
-import com.example.myapplication.databinding.ActivityNewGroupBinding
-import com.example.myapplication.ui.contact.AddContactActivity
+import com.example.myapplication.databinding.FragmentGroupBinding
 import com.example.myapplication.ui.group.GroupsViewModel
 import com.example.myapplication.utils.extension.kodeinViewModel
-import kotlinx.serialization.json.Json
 import org.kodein.di.KodeinAware
-import org.kodein.di.android.kodein
+import org.kodein.di.android.x.kodein
 import java.util.*
 
-class NewGroupActivity : AppCompatActivity(), KodeinAware {
+class GroupFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
 
     private val viewModel: GroupsViewModel by kodeinViewModel()
-    private lateinit var binding: ActivityNewGroupBinding
+    private lateinit var binding: FragmentGroupBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_group, container, false)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_new_group)
+        viewModel.addGroupData.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                findNavController().navigate(R.id.action_groupFragment_to_contactFragment)
+            }
+        })
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        viewModel.timePickerDialogData.observe(this, Observer { data ->
-            if (data) {
+        viewModel.timePickerDialogData.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 showTimePickerDialog()
             }
         })
 
-        viewModel.datePickerDialogData.observe(this, Observer { data ->
-            if (data) {
+        viewModel.datePickerDialogData.observe(viewLifecycleOwner, Observer {
+            if (it) {
                 showDatePickerDialog()
             }
         })
 
-        viewModel.addGroupData.observe(this, Observer { data ->
-            this.startActivity(
-                AddContactActivity::class.java,
-                Json.stringify(Group.serializer(), viewModel.group)
-            )
-        })
-
         binding.viewmodel = viewModel
-    }
 
-    private fun startActivity(activityClass: Class<*>, data: String = "") {
-        val intent = Intent(this, activityClass)
-        intent.putExtra("group", data)
-        this.startActivity(intent)
+        return binding.root
     }
 
     private fun showTimePickerDialog() {
@@ -68,14 +61,14 @@ class NewGroupActivity : AppCompatActivity(), KodeinAware {
         val minute = c.get(Calendar.MINUTE)
 
         val tpd = TimePickerDialog(
-            this,
+            context,
             TimePickerDialog.OnTimeSetListener { view, hour, minute ->
                 val currentTime = String.format("%02d:%02d", hour, minute)
                 binding.editTextStartTime.setText(currentTime)
             },
             hour,
             minute,
-            DateFormat.is24HourFormat(this)
+            DateFormat.is24HourFormat(context)
         ).show()
     }
 
@@ -85,8 +78,9 @@ class NewGroupActivity : AppCompatActivity(), KodeinAware {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
+
         val dpd = DatePickerDialog(
-            this,
+            requireContext(),
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 val currentDate = String.format("%02d/%02d/$year", dayOfMonth, monthOfYear)
                 binding.editTextDate.setText(currentDate)

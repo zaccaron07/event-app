@@ -30,12 +30,13 @@ class GroupsViewModel(
     var addGroupData = MutableLiveData<Boolean>()
 
     var selectedGroup = Group()
-    lateinit var currentContactId: String
     var groupDetailSaved = MutableLiveData<Boolean>()
 
     var group = Group()
 
     init {
+        groupDetailSaved.value = false
+
         getUserGroups()
     }
 
@@ -84,7 +85,7 @@ class GroupsViewModel(
 
     fun saveGroupDetail() {
         jobSaveGroupDetail = Coroutines.ioThenMain(
-            { groupRepository.updateGroupDetail(currentContactId, selectedGroup) },
+            { groupRepository.updateGroupDetail(contact.id, selectedGroup) },
             { groupDetailSaved.value = true }
         )
     }

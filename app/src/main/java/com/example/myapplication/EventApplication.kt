@@ -7,8 +7,8 @@ import com.example.myapplication.injection.ViewModelFactory
 import com.example.myapplication.data.database.AppDatabase
 import com.example.myapplication.data.repositories.ContactRepository
 import com.example.myapplication.data.repositories.GroupRepository
-import com.example.myapplication.network.ContactApi
-import com.example.myapplication.network.GroupApi
+import com.example.myapplication.data.network.ContactApi
+import com.example.myapplication.data.network.GroupApi
 import com.example.myapplication.ui.auth.AuthViewModel
 import com.example.myapplication.ui.contact.ContactViewModel
 import com.example.myapplication.ui.group.GroupsViewModel
@@ -25,6 +25,7 @@ import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.security.acl.Group
 
 class EventApplication : Application(), KodeinAware {
 
@@ -52,9 +53,7 @@ class EventApplication : Application(), KodeinAware {
         bindViewModel<AuthViewModel>() with provider {
             AuthViewModel(instance())
         }
-        bindViewModel<GroupsViewModel>() with provider {
-            GroupsViewModel(instance(), instance())
-        }
+        bindViewModel<GroupsViewModel>() with singleton { GroupsViewModel(instance(), instance()) }
         bindViewModel<ContactProfileViewModel>() with provider {
             ContactProfileViewModel(instance())
         }

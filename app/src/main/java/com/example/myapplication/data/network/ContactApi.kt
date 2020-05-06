@@ -1,4 +1,4 @@
-package com.example.myapplication.network
+package com.example.myapplication.data.network
 
 import com.example.myapplication.data.model.Contact
 import retrofit2.Response

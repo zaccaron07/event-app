@@ -7,15 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.data.model.Group
 import com.example.myapplication.databinding.FragmentGroupsBinding
-import com.example.myapplication.ui.HomeActivity
-import com.example.myapplication.ui.group.add.NewGroupActivity
-import com.example.myapplication.ui.group.detail.GroupDetailActivity
 import com.example.myapplication.utils.extension.kodeinViewModel
-import kotlinx.serialization.json.Json
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
@@ -43,7 +40,7 @@ class GroupsFragment : Fragment(), KodeinAware, RecyclerViewGroupsClickListener 
         binding.viewModel = viewModel
 
         binding.floatingActionButtonAddGroup.setOnClickListener {
-            (context as HomeActivity).startActivity(NewGroupActivity::class.java)
+            findNavController().navigate(R.id.action_groupsFragment_to_groupFragment)
         }
 
         return binding.root
@@ -54,19 +51,8 @@ class GroupsFragment : Fragment(), KodeinAware, RecyclerViewGroupsClickListener 
     }
 
     override fun onRecyclerViewItemClick(group: Group) {
-        val groupData: String = Json.stringify(Group.serializer(), group)
+        viewModel.selectedGroup = group
 
-        (context as HomeActivity).startActivity(
-            GroupDetailActivity::class.java,
-            groupData,
-            viewModel.contact.id
-        )
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            GroupsFragment().apply {
-            }
+        findNavController().navigate(R.id.action_groupsFragment_to_groupDetailFragment)
     }
 }

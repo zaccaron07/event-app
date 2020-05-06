@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import android.provider.ContactsContract
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.data.database.AppDatabase
-import com.example.myapplication.network.ContactApi
+import com.example.myapplication.data.network.ContactApi
 import com.google.firebase.auth.FirebaseAuth
 
 class ContactRepository(
