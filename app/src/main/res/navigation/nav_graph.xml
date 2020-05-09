@@ -31,7 +31,7 @@
     <fragment
             android:id="@+id/loginFragment"
             android:name="com.example.myapplication.ui.auth.LoginFragment"
-            android:label="LoginFragment">
+            android:label="Login">
         <action
                 android:id="@+id/action_loginFragment_to_contactProfileFragment"
                 app:destination="@id/contactProfileFragment"
@@ -42,7 +42,7 @@
     <fragment
             android:id="@+id/contactProfileFragment"
             android:name="com.example.myapplication.ui.profile.ContactProfileFragment"
-            android:label="ContactProfileFragment">
+            android:label="Perfil">
         <action
                 android:id="@+id/action_contactProfileFragment_to_groupsFragment"
                 app:destination="@id/groupsFragment" />
@@ -50,7 +50,7 @@
     <fragment
             android:id="@+id/groupFragment"
             android:name="com.example.myapplication.ui.group.add.GroupFragment"
-            android:label="GroupFragment"
+            android:label="Novo evento"
             tools:layout="@layout/fragment_group">
         <action
                 android:id="@+id/action_groupFragment_to_contactFragment"
@@ -59,7 +59,7 @@
     <fragment
             android:id="@+id/contactFragment"
             android:name="com.example.myapplication.ui.contact.ContactFragment"
-            android:label="ContactFragment">
+            android:label="Participantes">
         <action
                 android:id="@+id/action_contactFragment_to_groupsFragment"
                 app:destination="@id/groupsFragment" />
@@ -67,6 +67,6 @@
     <fragment
             android:id="@+id/groupDetailFragment"
             android:name="com.example.myapplication.ui.group.detail.GroupDetailFragment"
-            android:label="fragment_group_detail"
+            android:label="Detalhes evento"
             tools:layout="@layout/fragment_group_detail" />
 </navigation>

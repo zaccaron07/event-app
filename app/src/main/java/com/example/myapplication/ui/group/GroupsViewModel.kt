@@ -2,6 +2,7 @@ package com.example.myapplication.ui.group
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.myapplication.R
 import com.example.myapplication.base.BaseViewModel
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.data.model.Group
@@ -10,6 +11,7 @@ import com.example.myapplication.data.repositories.ContactRepository
 import com.example.myapplication.data.repositories.GroupRepository
 import com.example.myapplication.utils.Coroutines
 import com.example.myapplication.utils.GroupUtils
+import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
 
 class GroupsViewModel(
@@ -25,19 +27,17 @@ class GroupsViewModel(
     val groups: LiveData<List<Group>>
         get() = _groups
 
-    var timePickerDialogData = MutableLiveData<Boolean>()
-    var datePickerDialogData = MutableLiveData<Boolean>()
-    var addGroupData = MutableLiveData<Boolean>()
+    var timePickerDialogData: LiveEvent<Boolean> = LiveEvent()
+    var datePickerDialogData: LiveEvent<Boolean> = LiveEvent()
 
     var selectedGroup = Group()
-    var groupDetailSaved = MutableLiveData<Boolean>()
+    var groupDetailSaved: LiveEvent<Boolean> = LiveEvent()
 
     var group = Group()
 
     init {
-        groupDetailSaved.value = false
-
         getUserGroups()
+
     }
 
     override fun onCleared() {
@@ -79,14 +79,21 @@ class GroupsViewModel(
         datePickerDialogData.value = true
     }
 
+    fun onAddContactClick() {
+        navigate(R.id.action_groupFragment_to_contactFragment)
+    }
+
     fun onAddGroupClick() {
-        addGroupData.value = true
+        navigate(R.id.action_groupsFragment_to_groupFragment)
     }
 
     fun saveGroupDetail() {
         jobSaveGroupDetail = Coroutines.ioThenMain(
             { groupRepository.updateGroupDetail(contact.id, selectedGroup) },
-            { groupDetailSaved.value = true }
+            {
+                groupDetailSaved.value = true
+                popBackStack()
+            }
         )
     }
 }

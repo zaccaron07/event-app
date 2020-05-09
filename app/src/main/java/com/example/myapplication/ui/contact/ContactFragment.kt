@@ -14,12 +14,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.base.BaseFragment
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.databinding.FragmentContactBinding
 import com.example.myapplication.ui.group.GroupsViewModel
@@ -29,11 +28,11 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import java.util.*
 
-class ContactFragment : Fragment(), KodeinAware, RecyclerViewContactClickListener {
+class ContactFragment : BaseFragment(), KodeinAware, RecyclerViewContactClickListener {
 
     override val kodein by kodein()
 
-    private val viewModel: ContactViewModel by kodeinViewModel()
+    override val _viewModel: ContactViewModel by kodeinViewModel()
     private val viewModelGroups: GroupsViewModel by kodeinViewModel()
     private lateinit var binding: FragmentContactBinding
     private val REQUEST_READ_CONTACTS = 100
@@ -44,30 +43,24 @@ class ContactFragment : Fragment(), KodeinAware, RecyclerViewContactClickListene
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contact, container, false)
 
-        viewModel.groupSaved.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                findNavController().navigate(R.id.action_contactFragment_to_groupsFragment)
-            }
-        })
-
-        viewModel.countryIso =
+        _viewModel.countryIso =
             (requireContext().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).networkCountryIso.toUpperCase(
                 Locale.getDefault()
             )
-        viewModel.group = viewModelGroups.group
+        _viewModel.group = viewModelGroups.group
 
-        viewModel.addMyContactToGroup()
+        _viewModel.addMyContactToGroup()
 
-        viewModel.contacts.observe(viewLifecycleOwner, Observer {
+        _viewModel.contacts.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
                 initializeListView(it)
             }
         })
 
-        binding.viewmodel = viewModel
+        binding.viewmodel = _viewModel
 
         if (this.checkContactPermission()) {
-            viewModel.loadContacts()
+            _viewModel.loadContacts()
         }
 
         return binding.root
@@ -101,14 +94,14 @@ class ContactFragment : Fragment(), KodeinAware, RecyclerViewContactClickListene
     }
 
     override fun onRecyclerViewItemClick(contact: Contact) {
-        if (contact.id != "") {
+        if (contact.id.isNotEmpty()) {
             contact.checked = !contact.checked
             contact.contact = contact.id
 
             if (contact.checked) {
-                viewModel.group.contacts.add(contact)
+                _viewModel.group.contacts.add(contact)
             } else {
-                viewModel.group.contacts.remove(contact)
+                _viewModel.group.contacts.remove(contact)
             }
         } else {
             this.messageContactWithNoId()
@@ -122,7 +115,7 @@ class ContactFragment : Fragment(), KodeinAware, RecyclerViewContactClickListene
     ) {
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                viewModel.loadContacts()
+                _viewModel.loadContacts()
             } else {
                 Toast.makeText(
                     context,
@@ -140,7 +133,7 @@ class ContactFragment : Fragment(), KodeinAware, RecyclerViewContactClickListene
             .setMessage("Este contato ainda não possui uma conta no AppEvento!")
             .setTitle("Atenção")
             .apply {
-                setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, id ->
+                setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
                 })
             }
 

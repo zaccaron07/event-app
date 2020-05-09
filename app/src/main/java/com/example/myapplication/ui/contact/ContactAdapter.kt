@@ -35,6 +35,7 @@ class ContactAdapter(
 
             itemView.checkBoxContact.setOnClickListener {
                 listener.onRecyclerViewItemClick(contact)
+                itemView.checkBoxContact.isChecked = contact.checked
             }
         }
     }

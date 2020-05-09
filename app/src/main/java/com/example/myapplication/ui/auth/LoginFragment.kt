@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
-            if (resultCode === Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 navigateToContactProfile()
             } else {
                 if (response == null) {

@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.base.BaseFragment
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.databinding.FragmentGroupDetailBinding
 import com.example.myapplication.ui.group.GroupsViewModel
@@ -18,11 +17,11 @@ import com.example.myapplication.utils.extension.kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
-class GroupDetailFragment : Fragment(), KodeinAware, RecyclerViewGroupDetailClickListener {
+class GroupDetailFragment : BaseFragment(), KodeinAware, RecyclerViewGroupDetailClickListener {
 
     override val kodein by kodein()
 
-    private val viewModel: GroupsViewModel by kodeinViewModel()
+    override val _viewModel: GroupsViewModel by kodeinViewModel()
     private lateinit var binding: FragmentGroupDetailBinding
 
     override fun onCreateView(
@@ -36,17 +35,15 @@ class GroupDetailFragment : Fragment(), KodeinAware, RecyclerViewGroupDetailClic
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         binding.recyclerViewGroupParticipants.adapter =
-            GroupDetailAdapter(viewModel.selectedGroup.contacts, this, viewModel.contact.id)
+            GroupDetailAdapter(_viewModel.selectedGroup.contacts, this, _viewModel.contact.id)
 
-        viewModel.groupDetailSaved.observe(viewLifecycleOwner, Observer { it ->
+        _viewModel.groupDetailSaved.observe(viewLifecycleOwner, Observer { it ->
             if (it) {
-                viewModel.groupDetailSaved.value = false
                 Toast.makeText(context, "Grupo atualizado!", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack()
             }
         })
 
-        binding.viewmodel = viewModel
+        binding.viewmodel = _viewModel
 
         return binding.root
     }

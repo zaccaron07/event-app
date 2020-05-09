@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.contact
 
 import androidx.lifecycle.MutableLiveData
+import com.example.myapplication.R
 import com.example.myapplication.base.BaseViewModel
 import com.example.myapplication.data.model.Contact
 import com.example.myapplication.data.model.Group
@@ -16,7 +17,6 @@ class ContactViewModel(
 ) : BaseViewModel() {
 
     var group = Group()
-    var groupSaved = MutableLiveData<Boolean>()
     lateinit var _contacts: MutableList<Contact>
 
     val contacts = MutableLiveData<MutableList<Contact>>()
@@ -30,7 +30,7 @@ class ContactViewModel(
     fun saveGroup() {
         job = Coroutines.ioThenMain(
             { groupRepository.saveGroup(group) },
-            { groupSaved.value = true }
+            { navigate(R.id.action_contactFragment_to_groupsFragment) }
         )
     }
 

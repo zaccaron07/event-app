@@ -5,23 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
+import com.example.myapplication.base.BaseFragment
 import com.example.myapplication.data.model.Group
 import com.example.myapplication.databinding.FragmentGroupsBinding
 import com.example.myapplication.utils.extension.kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
-class GroupsFragment : Fragment(), KodeinAware, RecyclerViewGroupsClickListener {
+class GroupsFragment : BaseFragment(), KodeinAware, RecyclerViewGroupsClickListener {
     override val kodein by kodein()
 
     private var recyclerViewAdapter = GroupsAdapter(this)
     private lateinit var binding: FragmentGroupsBinding
-    private val viewModel: GroupsViewModel by kodeinViewModel()
+    override val _viewModel: GroupsViewModel by kodeinViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,15 +32,11 @@ class GroupsFragment : Fragment(), KodeinAware, RecyclerViewGroupsClickListener 
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewGroups.adapter = recyclerViewAdapter
 
-        viewModel.groups.observe(viewLifecycleOwner, Observer { groups ->
+        _viewModel.groups.observe(viewLifecycleOwner, Observer { groups ->
             groups?.let { render(groups) }
         })
 
-        binding.viewModel = viewModel
-
-        binding.floatingActionButtonAddGroup.setOnClickListener {
-            findNavController().navigate(R.id.action_groupsFragment_to_groupFragment)
-        }
+        binding.viewModel = _viewModel
 
         return binding.root
     }
@@ -51,8 +46,8 @@ class GroupsFragment : Fragment(), KodeinAware, RecyclerViewGroupsClickListener 
     }
 
     override fun onRecyclerViewItemClick(group: Group) {
-        viewModel.selectedGroup = group
+        binding.viewModel?.selectedGroup = group
 
-        findNavController().navigate(R.id.action_groupsFragment_to_groupDetailFragment)
+        binding.viewModel?.navigate(R.id.action_groupsFragment_to_groupDetailFragment)
     }
 }

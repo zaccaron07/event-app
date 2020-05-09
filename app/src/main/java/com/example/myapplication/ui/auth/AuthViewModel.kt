@@ -2,10 +2,9 @@ package com.example.myapplication.ui.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import com.example.myapplication.R
 import com.example.myapplication.base.BaseViewModel
 import com.example.myapplication.data.model.Contact
-import com.example.myapplication.data.model.Group
 import com.example.myapplication.data.repositories.ContactRepository
 import com.example.myapplication.utils.Coroutines
 
@@ -39,8 +38,11 @@ class AuthViewModel(
         Coroutines.ioThenMain(
             { contactRepository.getContact() },
             {
-                _userCreatedAndAuthenticated.value =
-                    !it?.id.isNullOrEmpty() && authenticationState == AuthenticationState.AUTHENTICATED
+                if (!it?.id.isNullOrEmpty() && authenticationState == AuthenticationState.AUTHENTICATED) {
+                    navigate(R.id.action_splashFragment_to_groupsFragment)
+                } else {
+                    navigate(R.id.action_splashFragment_to_loginFragment)
+                }
             }
         )
     }

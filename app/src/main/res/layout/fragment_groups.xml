@@ -27,6 +27,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:clickable="true"
+                    android:onClick="@{() -> viewModel.onAddGroupClick()}"
                     android:src="@drawable/ic_add_white_24dp"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
