@@ -11,6 +11,7 @@ data class GroupDTO(
 ) {
     var id: String = ""
     var contacts: List<ContactTemp> = listOf()
+    var location: Location = Location()
 }
 
 @Serializable

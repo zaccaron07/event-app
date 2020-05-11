@@ -19,6 +19,7 @@ class GroupUtils {
 
             group.id = it.id
             group.contacts = formatContacts(it)
+            group.location = it.location
 
             groupList.add(group)
         }
