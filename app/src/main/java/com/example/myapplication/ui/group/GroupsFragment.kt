@@ -41,6 +41,12 @@ class GroupsFragment : BaseFragment(), KodeinAware, RecyclerViewGroupsClickListe
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        binding.viewModel?.group = Group()
+    }
+
     private fun render(groupList: List<Group>) {
         recyclerViewAdapter.updateGroupList(groupList)
     }

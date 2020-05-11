@@ -29,6 +29,7 @@ class GroupsViewModel(
 
     var timePickerDialogData: LiveEvent<Boolean> = LiveEvent()
     var datePickerDialogData: LiveEvent<Boolean> = LiveEvent()
+    val locationData: LiveEvent<Boolean> = LiveEvent()
 
     var selectedGroup = Group()
     var groupDetailSaved: LiveEvent<Boolean> = LiveEvent()
@@ -85,6 +86,10 @@ class GroupsViewModel(
 
     fun onAddGroupClick() {
         navigate(R.id.action_groupsFragment_to_groupFragment)
+    }
+
+    fun onLocationClick() {
+        locationData.value = true
     }
 
     fun saveGroupDetail() {

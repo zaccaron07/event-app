@@ -90,4 +90,7 @@ dependencies {
 
     // Dynamic Feature Module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    //Location Picker
+    implementation 'com.schibstedspain.android:leku:6.4.0'
 }

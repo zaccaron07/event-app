@@ -11,4 +11,5 @@ data class Group(
 ) {
     var id: String = ""
     var contacts: MutableList<Contact> = mutableListOf()
+    var location: Location = Location()
 }

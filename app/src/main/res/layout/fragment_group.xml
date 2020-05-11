@@ -19,15 +19,15 @@
         <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:hint="Nome"
                 android:inputType="textPersonName"
                 android:text="@={viewmodel.group.name}"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -35,15 +35,17 @@
         <EditText
                 android:id="@+id/editTextDescription"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
+                android:gravity="start|top"
                 android:hint="Descrição"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
                 android:text="@={viewmodel.group.description}"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextName" />
@@ -51,9 +53,9 @@
         <EditText
                 android:id="@+id/editTextStartTime"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:focusable="false"
@@ -61,7 +63,7 @@
                 android:hint="Hora inicial"
                 android:onClick="@{() -> viewmodel.onTimePickerDialogClick()}"
                 android:text="@={viewmodel.group.startTime}"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
@@ -69,9 +71,9 @@
         <EditText
                 android:id="@+id/editTextDate"
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:focusable="false"
@@ -79,7 +81,7 @@
                 android:hint="Data"
                 android:onClick="@{() -> viewmodel.onDatePickerDialogClick()}"
                 android:text="@={viewmodel.group.date}"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextStartTime" />
@@ -90,12 +92,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:clickable="true"
                 android:onClick="@{() -> viewmodel.onAddContactClick()}"
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_person_add_24dp" />
+
+        <EditText
+                android:id="@+id/editTextLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Localização"
+                android:inputType="textPersonName"
+                android:onClick="@{() -> viewmodel.onLocationClick()}"
+                android:text="@={viewmodel.group.location.address}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
