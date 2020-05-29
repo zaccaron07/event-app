@@ -31,8 +31,11 @@ class GroupsFragment : BaseFragment(), KodeinAware, RecyclerViewGroupsClickListe
         binding.recyclerViewGroups.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewGroups.adapter = recyclerViewAdapter
-
+        binding.swipeContainer.setOnRefreshListener {
+            _viewModel.getUserGroups()
+        }
         _viewModel.groups.observe(viewLifecycleOwner, Observer { groups ->
+            binding.swipeContainer.isRefreshing = false
             groups?.let { render(groups) }
         })
 
@@ -45,6 +48,7 @@ class GroupsFragment : BaseFragment(), KodeinAware, RecyclerViewGroupsClickListe
         super.onResume()
 
         binding.viewModel?.group = Group()
+        binding.viewModel?.getUserGroups()
     }
 
     private fun render(groupList: List<Group>) {

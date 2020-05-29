@@ -38,7 +38,6 @@ class GroupsViewModel(
 
     init {
         getUserGroups()
-
     }
 
     override fun onCleared() {
@@ -48,7 +47,7 @@ class GroupsViewModel(
         if (::jobSaveGroupDetail.isInitialized) jobSaveGroupDetail.cancel()
     }
 
-    private fun getUserGroups() {
+    fun getUserGroups() {
         Coroutines.io {
             val contact = contactRepository.getContact()
 
