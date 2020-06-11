@@ -79,11 +79,10 @@ dependencies {
     kapt "com.android.databinding:compiler:3.1.4"
 
     //Kodein
-    implementation "org.kodein.di:kodein-di-generic-jvm:$kodein_version"
     implementation "org.kodein.di:kodein-di-framework-android-x:$kodein_version"
 
     //Google Phone number utils
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.4'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.5'
 
     // Kotlin
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

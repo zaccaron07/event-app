@@ -3,33 +3,28 @@ package com.example.myapplication
 import android.app.Application
 import android.content.ContentResolver
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.injection.ViewModelFactory
 import com.example.myapplication.data.database.AppDatabase
-import com.example.myapplication.data.repositories.ContactRepository
-import com.example.myapplication.data.repositories.GroupRepository
 import com.example.myapplication.data.network.ContactApi
 import com.example.myapplication.data.network.GroupApi
+import com.example.myapplication.data.repositories.ContactRepository
+import com.example.myapplication.data.repositories.GroupRepository
+import com.example.myapplication.injection.ViewModelFactory
+import com.example.myapplication.utils.interceptor.AuthInterceptor
 import com.example.myapplication.ui.auth.AuthViewModel
 import com.example.myapplication.ui.contact.ContactViewModel
 import com.example.myapplication.ui.group.GroupsViewModel
 import com.example.myapplication.ui.profile.ContactProfileViewModel
 import com.example.myapplication.utils.APIConstants
 import com.example.myapplication.utils.extension.bindViewModel
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
+import okhttp3.OkHttpClient
+import org.kodein.di.*
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.direct
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.security.acl.Group
 
-class EventApplication : Application(), KodeinAware {
+class EventApplication : Application(), DIAware {
 
-    override val kodein = Kodein.lazy {
+    override val di = DI.lazy {
         import(androidXModule(this@EventApplication))
 
         bind() from singleton { AppDatabase(instance()) }
@@ -37,6 +32,9 @@ class EventApplication : Application(), KodeinAware {
         bind<ContentResolver>() with singleton { contentResolver }
         bind<Retrofit>() with singleton {
             instance<Retrofit.Builder>()
+                .client(
+                    OkHttpClient.Builder().addInterceptor(AuthInterceptor()).build()
+                )
                 .baseUrl(APIConstants.BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
@@ -49,7 +47,7 @@ class EventApplication : Application(), KodeinAware {
         }
         bind() from singleton { GroupRepository(instance()) }
         bind() from singleton { ContactRepository(instance(), instance(), instance()) }
-        bind<ViewModelProvider.Factory>() with singleton { ViewModelFactory(kodein.direct) }
+        bind<ViewModelProvider.Factory>() with singleton { ViewModelFactory(di.direct) }
         bindViewModel<AuthViewModel>() with provider {
             AuthViewModel(instance())
         }

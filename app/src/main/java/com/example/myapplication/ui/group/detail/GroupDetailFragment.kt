@@ -14,12 +14,12 @@ import com.example.myapplication.data.model.Contact
 import com.example.myapplication.databinding.FragmentGroupDetailBinding
 import com.example.myapplication.ui.group.GroupsViewModel
 import com.example.myapplication.utils.extension.kodeinViewModel
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 
-class GroupDetailFragment : BaseFragment(), KodeinAware, RecyclerViewGroupDetailClickListener {
+class GroupDetailFragment : BaseFragment(), DIAware, RecyclerViewGroupDetailClickListener {
 
-    override val kodein by kodein()
+    override val di by di()
 
     override val _viewModel: GroupsViewModel by kodeinViewModel()
     private lateinit var binding: FragmentGroupDetailBinding

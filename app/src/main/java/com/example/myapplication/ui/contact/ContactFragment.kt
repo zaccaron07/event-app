@@ -24,13 +24,13 @@ import com.example.myapplication.databinding.FragmentContactBinding
 import com.example.myapplication.ui.group.GroupsViewModel
 import com.example.myapplication.utils.extension.kodeinViewModel
 import kotlinx.android.synthetic.main.fragment_contact.*
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 import java.util.*
 
-class ContactFragment : BaseFragment(), KodeinAware, RecyclerViewContactClickListener {
+class ContactFragment : BaseFragment(), DIAware, RecyclerViewContactClickListener {
 
-    override val kodein by kodein()
+    override val di by di()
 
     override val _viewModel: ContactViewModel by kodeinViewModel()
     private val viewModelGroups: GroupsViewModel by kodeinViewModel()

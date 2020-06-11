@@ -20,13 +20,13 @@ import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LOCATION_ADDRESS
 import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LocationPickerActivity
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 import java.util.*
 
-class GroupFragment : BaseFragment(), KodeinAware {
+class GroupFragment : BaseFragment(), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
 
     override val _viewModel: GroupsViewModel by kodeinViewModel()
 

@@ -8,11 +8,11 @@ import com.example.myapplication.R
 import com.example.myapplication.base.BaseFragment
 import com.example.myapplication.ui.auth.AuthViewModel
 import com.example.myapplication.utils.extension.kodeinViewModel
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 
-class SplashFragment : BaseFragment(), KodeinAware {
-    override val kodein by kodein()
+class SplashFragment : BaseFragment(), DIAware {
+    override val di by di()
 
     override val _viewModel: AuthViewModel by kodeinViewModel()
 

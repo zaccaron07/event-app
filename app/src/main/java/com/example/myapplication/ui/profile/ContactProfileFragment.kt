@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentUserProfileBinding
 import com.example.myapplication.utils.extension.kodeinViewModel
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 
-class ContactProfileFragment : Fragment(), KodeinAware {
+class ContactProfileFragment : Fragment(), DIAware {
 
-    override val kodein by kodein()
+    override val di by di()
 
     private val viewModel: ContactProfileViewModel by kodeinViewModel()
 

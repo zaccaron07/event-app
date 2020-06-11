@@ -12,11 +12,11 @@ import com.example.myapplication.base.BaseFragment
 import com.example.myapplication.data.model.Group
 import com.example.myapplication.databinding.FragmentGroupsBinding
 import com.example.myapplication.utils.extension.kodeinViewModel
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.kodein
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.di
 
-class GroupsFragment : BaseFragment(), KodeinAware, RecyclerViewGroupsClickListener {
-    override val kodein by kodein()
+class GroupsFragment : BaseFragment(), DIAware, RecyclerViewGroupsClickListener {
+    override val di by di()
 
     private var recyclerViewAdapter = GroupsAdapter(this)
     private lateinit var binding: FragmentGroupsBinding
