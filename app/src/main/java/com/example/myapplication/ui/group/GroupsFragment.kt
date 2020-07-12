@@ -18,7 +18,6 @@ import org.kodein.di.android.x.di
 class GroupsFragment : BaseFragment(), DIAware, RecyclerViewGroupsClickListener {
     override val di by di()
 
-    private var recyclerViewAdapter = GroupsAdapter(this)
     private lateinit var binding: FragmentGroupsBinding
     override val _viewModel: GroupsViewModel by kodeinViewModel()
 
@@ -28,36 +27,35 @@ class GroupsFragment : BaseFragment(), DIAware, RecyclerViewGroupsClickListener 
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_groups, container, false)
-        binding.recyclerViewGroups.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerViewGroups.adapter = recyclerViewAdapter
-        binding.swipeContainer.setOnRefreshListener {
-            _viewModel.getUserGroups()
-        }
+        binding.recyclerViewGroups.layoutManager = LinearLayoutManager(context)
+        val groupsAdapter = GroupsListAdapter(this)
+        binding.recyclerViewGroups.adapter = groupsAdapter
+
         _viewModel.groups.observe(viewLifecycleOwner, Observer { groups ->
             binding.swipeContainer.isRefreshing = false
-            groups?.let { render(groups) }
+            groupsAdapter.submitList(groups)
         })
-
-        binding.viewModel = _viewModel
 
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        binding.viewModel?.group = Group()
-        binding.viewModel?.getUserGroups()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binds()
     }
 
-    private fun render(groupList: List<Group>) {
-        recyclerViewAdapter.updateGroupList(groupList)
+    private fun binds() {
+        binding.floatingActionButtonAddGroup.setOnClickListener {
+            _viewModel.onAddGroupClick()
+        }
+
+        binding.swipeContainer.setOnRefreshListener {
+            _viewModel.getUserGroups()
+        }
     }
 
     override fun onRecyclerViewItemClick(group: Group) {
-        binding.viewModel?.selectedGroup = group
-
-        binding.viewModel?.navigate(R.id.action_groupsFragment_to_groupDetailFragment)
+        _viewModel.selectedGroup = group
+        _viewModel.navigate(R.id.action_groupsFragment_to_groupDetailFragment)
     }
 }
