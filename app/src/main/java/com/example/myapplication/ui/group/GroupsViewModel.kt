@@ -13,6 +13,7 @@ import com.example.myapplication.utils.Coroutines
 import com.example.myapplication.utils.GroupUtils
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
+import com.example.myapplication.utils.Result
 
 class GroupsViewModel(
     private val contactRepository: ContactRepository,
@@ -23,8 +24,8 @@ class GroupsViewModel(
     private lateinit var job: Job
     private lateinit var jobSaveGroupDetail: Job
 
-    private val _groups = MutableLiveData<List<Group>>()
-    val groups: LiveData<List<Group>>
+    private val _groups = MutableLiveData<Result<List<Group>>>()
+    val groups: LiveData<Result<List<Group>>>
         get() = _groups
 
     var timePickerDialogData: LiveEvent<Boolean> = LiveEvent()
@@ -48,6 +49,7 @@ class GroupsViewModel(
     }
 
     fun getUserGroups() {
+        _groups.postValue(Result.InProgress)
         Coroutines.io {
             val contact = contactRepository.getContact()
 
@@ -64,11 +66,13 @@ class GroupsViewModel(
         this.contact = contact
     }
 
-    private fun onRetrieveGroupsSuccess(groupListDTO: List<GroupDTO>) {
+    private fun onRetrieveGroupsSuccess(result: Result<List<GroupDTO>>) {
         val groupUtils = GroupUtils()
-        val groupList = groupUtils.formatJsonGroup(groupListDTO)
+        if (result is Result.Success) {
+            val groupList = Result.Success(groupUtils.formatJsonGroup(result.data))
 
-        _groups.value = groupList
+            _groups.value = groupList
+        }
     }
 
     fun onTimePickerDialogClick() {

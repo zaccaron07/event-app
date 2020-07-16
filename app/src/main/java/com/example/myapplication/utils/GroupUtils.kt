@@ -6,7 +6,7 @@ import com.example.myapplication.data.model.GroupDTO
 
 class GroupUtils {
 
-    fun formatJsonGroup(groupListDTO: List<GroupDTO>): ArrayList<Group> {
+    fun formatJsonGroup(groupListDTO: List<GroupDTO>): List<Group> {
         var groupList = ArrayList<Group>()
 
         groupListDTO.forEach {
